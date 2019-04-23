@@ -5,7 +5,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 
-	"github.com/evalphobia/aws-sdk-go-wrapper/private/pointers"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/private/pointers"
 )
 
 const defaultRegion = "us-east-1"

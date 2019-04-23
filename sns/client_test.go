@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/evalphobia/aws-sdk-go-wrapper/config"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/config"
 )
 
 const (
@@ -163,7 +163,7 @@ func TestBulkPublishByDevice(t *testing.T) {
 	assert := assert.New(t)
 	svc := getTestClient(t)
 
-	err := svc.BulkPublishByDevice("ios", []string{"fooEndpoint"}, "message")
+	err := svc.BulkPublishByDevice("ios", []string{"fooEndpoint"}, "message", nil)
 	assert.Nil(err)
 }
 

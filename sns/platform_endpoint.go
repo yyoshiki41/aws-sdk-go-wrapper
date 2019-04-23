@@ -5,7 +5,7 @@ import (
 
 	SDK "github.com/aws/aws-sdk-go/service/sns"
 
-	"github.com/evalphobia/aws-sdk-go-wrapper/private/pointers"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/private/pointers"
 )
 
 // PlatformEndpoint is struct for Platform Endpoint.

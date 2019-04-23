@@ -41,6 +41,7 @@ func TestTopicPublish(t *testing.T) {
 
 	topicName := "fooTopic"
 	topic, _ := svc.CreateTopic(topicName)
-	err := topic.Publish("foo")
+	opt := make(map[string]interface{})
+	err := topic.Publish("foo", opt)
 	assert.NoError(err)
 }

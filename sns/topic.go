@@ -3,7 +3,7 @@ package sns
 import (
 	SDK "github.com/aws/aws-sdk-go/service/sns"
 
-	"github.com/evalphobia/aws-sdk-go-wrapper/private/pointers"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/private/pointers"
 )
 
 // Topic is struct for Topic.
@@ -42,8 +42,8 @@ func (t *Topic) Subscribe(endpointARN, protocol string) (subscriptionARN string,
 }
 
 // Publish sends notification to the topic.
-func (t *Topic) Publish(msg string) error {
-	return t.svc.Publish(t.arn, msg, nil)
+func (t *Topic) Publish(msg string, opt map[string]interface{}) error {
+	return t.svc.Publish(t.arn, msg, opt)
 }
 
 // Delete deltes the topic.

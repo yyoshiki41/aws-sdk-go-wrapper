@@ -11,9 +11,9 @@ import (
 
 	SDK "github.com/aws/aws-sdk-go/service/sns"
 
-	"github.com/evalphobia/aws-sdk-go-wrapper/config"
-	"github.com/evalphobia/aws-sdk-go-wrapper/log"
-	"github.com/evalphobia/aws-sdk-go-wrapper/private/pointers"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/config"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/log"
+	"github.com/yyoshiki41/aws-sdk-go-wrapper/private/pointers"
 )
 
 // Application types
@@ -231,7 +231,7 @@ func (svc *SNS) PublishByToken(device, token string, msg string, badge int) erro
 
 // BulkPublishByDevice sends mobile notification to many endpoints.
 // (supports single device only)
-func (svc *SNS) BulkPublishByDevice(device string, tokens []string, msg string) error {
+func (svc *SNS) BulkPublishByDevice(device string, tokens []string, msg string, opt map[string]interface{}) error {
 	name := fmt.Sprintf("%d", time.Now().UnixNano()) + "_" + device
 	topic, err := svc.CreateTopic(name)
 	if err != nil {
@@ -252,7 +252,7 @@ func (svc *SNS) BulkPublishByDevice(device string, tokens []string, msg string) 
 		}(token)
 	}
 	wg.Wait()
-	topic.Publish(msg)
+	topic.Publish(msg, opt)
 	topic.Delete()
 	return nil
 }
@@ -270,7 +270,7 @@ func (svc *SNS) BulkPublish(tokens map[string][]string, msg string) error {
 			if l < to {
 				to = l
 			}
-			svc.BulkPublishByDevice(device, t[from:to], msg)
+			svc.BulkPublishByDevice(device, t[from:to], msg, nil)
 		}
 	}
 	return nil
