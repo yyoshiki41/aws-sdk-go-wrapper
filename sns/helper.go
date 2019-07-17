@@ -6,6 +6,8 @@ const (
 	gcmKeyMessage         = "message"
 	fcmAndroidKeyPriority = "priority"
 	apnsKeyMessage        = "alert"
+	apnsKeyTitle          = "title"
+	apnsKeyBody           = "body"
 	apnsKeySound          = "sound"
 	apnsKeyCategory       = "category"
 	apnsKeyBadge          = "badge"
@@ -33,9 +35,19 @@ func composeMessageGCM(msg string, opt map[string]interface{}) (payload string, 
 }
 
 // make sns message for Apple Push Notification Service.
+// https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/CreatingtheNotificationPayload.html
 func composeMessageAPNS(msg string, opt map[string]interface{}) (payload string, err error) {
 	aps := make(map[string]interface{})
-	aps[apnsKeyMessage] = msg
+
+	if v, ok := opt[apnsKeyTitle]; ok {
+		// The title and body keys provide the contents of the alert.
+		aps[apnsKeyMessage] = map[string]interface{}{
+			apnsKeyTitle: v,
+			apnsKeyBody:  msg,
+		}
+	} else {
+		aps[apnsKeyMessage] = msg
+	}
 
 	aps[apnsKeySound] = "default"
 	if v, ok := opt[apnsKeySound]; ok {
