@@ -244,10 +244,14 @@ func (svc *SNS) BulkPublishByDevice(device string, tokens []string, msg string, 
 		go func(t string) {
 			e, err := svc.RegisterEndpoint(device, t)
 			if err != nil {
+				svc.Errorf("error on `CreatePlatformEndpoint` operation; token=%s; error=%s;", t, err.Error())
 				wg.Done()
 				return
 			}
-			topic.Subscribe(e.arn, e.protocol)
+			_, err = topic.Subscribe(e.arn, e.protocol)
+			if err != nil {
+				svc.Errorf("error on `Subscribe` operation; arn=%s; error=%s;", e.arn, err.Error())
+			}
 			wg.Done()
 		}(token)
 	}
