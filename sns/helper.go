@@ -3,8 +3,10 @@ package sns
 import "encoding/json"
 
 const (
-	gcmKeyMessage         = "message"
-	fcmAndroidKeyPriority = "priority"
+	fcmKeyMessageNotificationTitle = "title"
+	fcmKeyMessageNotificationBody  = "body"
+	fcmAndroidKeyPriority          = "priority"
+
 	apnsKeyMessage        = "alert"
 	apnsKeyTitle          = "title"
 	apnsKeyBody           = "body"
@@ -18,13 +20,22 @@ const fcmPriorityHigh = "high"
 
 // make sns message for Google Cloud Messaging.
 func composeMessageGCM(msg string, opt map[string]interface{}) (payload string, err error) {
+	notification := make(map[string]interface{})
+	// The title and body keys provide the contents of the alert.
+	// https://firebase.google.com/docs/cloud-messaging/http-server-ref?hl=ja
+	notification[fcmKeyMessageNotificationBody] = msg
+	if title, ok := opt[fcmKeyMessageNotificationTitle]; ok {
+		notification[fcmKeyMessageNotificationTitle] = title
+	}
+
+	// https://firebase.google.com/docs/cloud-messaging/concept-options#data_messages
 	data := make(map[string]interface{})
-	data[gcmKeyMessage] = msg
 	for k, v := range opt {
 		data[k] = v
 	}
 
 	message := make(map[string]interface{})
+	message["notification"] = notification
 	message["data"] = data
 
 	// set Android FCM priority, which is compatible to GCM
